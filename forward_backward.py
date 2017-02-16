@@ -23,10 +23,7 @@ def forward_algorithm(t):
     fv = [None]*t
     fv[0] = np.matrix([[0.5], [0.5]])
     for i in range(1, t):
-        # print("\nDay", i, "\n---------------")
         fv[i] = forward(fv[i-1], ev[i])
-        # print(fv[i])
-        # print("---------------")
     return fv
 
 
@@ -35,23 +32,21 @@ def backward(prev_msg, evidence):
 
 
 def forward_backward_algorithm(t):
-
     fv = forward_algorithm(t)
-
     sv = [None]*t
     b = np.matrix([[1], [1]])
     for i in range(t, 0, -1):
         print("\nDay", i, "\n---------------")
-        sv[i-1] = np.multiply(fv[i], b)
-        sv[i-1] = sv[i-1] / sv[i-1].sum()
-        b = backward(b, ev[i])
+        sv[i-1] = np.multiply(fv[i], b)     # Calculate sv
+        sv[i-1] /= sv[i-1].sum()            # Normalise sv
+        b = backward(b, ev[i])              # Save backward message
         print("sv:\n", sv[i-1])
         print("b:\n", b)
         print("---------------")
 
 
 # noinspection PyPep8Naming
-def get_O(umbrella):
+def get_O(umbrella):       # Returns the correct observation matrix given the current evidence
     if umbrella:
         return O_true
     else:
