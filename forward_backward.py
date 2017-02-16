@@ -20,12 +20,33 @@ def forward(prev_msg, evidence):
 
 def forward_algorithm(t):
     t += 1
-    fv = [0]*t
+    fv = [None]*t
     fv[0] = np.matrix([[0.5], [0.5]])
     for i in range(1, t):
-        print("\nIteration ", i, "\n---------------")
+        # print("\nDay", i, "\n---------------")
         fv[i] = forward(fv[i-1], ev[i])
-        print(fv[i])
+        # print(fv[i])
+        # print("---------------")
+    return fv
+
+
+def backward(prev_msg, evidence):
+    return T * get_O(evidence) * prev_msg                  # T * O_t * b_{k+2:t}
+
+
+def forward_backward_algorithm(t):
+
+    fv = forward_algorithm(t)
+
+    sv = [None]*t
+    b = np.matrix([[1], [1]])
+    for i in range(t, 0, -1):
+        print("\nDay", i, "\n---------------")
+        sv[i-1] = np.multiply(fv[i], b)
+        sv[i-1] = sv[i-1] / sv[i-1].sum()
+        b = backward(b, ev[i])
+        print("sv:\n", sv[i-1])
+        print("b:\n", b)
         print("---------------")
 
 
@@ -37,4 +58,4 @@ def get_O(umbrella):
         return O_false
 
 
-forward_algorithm(5)
+forward_backward_algorithm(2)

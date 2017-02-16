@@ -1,12 +1,12 @@
 import numpy as np
 
-T = np.matrix([[0.7, 0.3],
+T = np.matrix([[0.7, 0.3],      # Transition model
                [0.3, 0.7]])
 
-O_true = np.matrix([[0.9, 0],
+O_true = np.matrix([[0.9, 0],   # Observation model
                     [0, 0.2]])
 
-O_false = np.matrix([[0.1, 0],
+O_false = np.matrix([[0.1, 0],  # Observation model
                      [0, 0.8]])
 
 ev = [None, 1, 1, 0, 1, 1]
@@ -23,7 +23,7 @@ def forward_algorithm(t):
     fv = [0]*t
     fv[0] = np.matrix([[0.5], [0.5]])
     for i in range(1, t):
-        print("\nIteration ", i, "\n---------------")
+        print("\nDay", i, "\n---------------")
         fv[i] = forward(fv[i-1], ev[i])
         print(fv[i])
         print("---------------")
