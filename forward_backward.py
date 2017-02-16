@@ -12,21 +12,10 @@ O_false = np.matrix([[0.1, 0],
 ev = [None, 1, 1, 0, 1, 1]
 
 
-# def forward(prev_msg, evidence):
-#     prediction = get_O(evidence) * np.transpose(T) * prev_msg
-#     print("Prediction:\n", prediction)
-#     normalisation = 1/prediction.sum()
-#     print("Normalisation: ", normalisation)
-#     prediction *= normalisation
-#     print("\nFinal prediction:\n", prediction, "\n---------------")
-#     return prediction
 def forward(prev_msg, evidence):
-    prediction = get_O(evidence) * np.transpose(T) * prev_msg
-    return prediction / prediction.sum()
-
-
-def estimate(t):
-    return t
+    prediction = get_O(evidence) * np.transpose(T) * prev_msg   # O_t * T(transposed) * f_{t-1}
+    normalisation = prediction.sum()                            # Calculate normalisation
+    return prediction / normalisation                           # Return normalised values
 
 
 def forward_algorithm(t):
@@ -34,9 +23,10 @@ def forward_algorithm(t):
     fv = [0]*t
     fv[0] = np.matrix([[0.5], [0.5]])
     for i in range(1, t):
-        print("\n\nIteration ", i, "\n---------------")
+        print("\nIteration ", i, "\n---------------")
         fv[i] = forward(fv[i-1], ev[i])
         print(fv[i])
+        print("---------------")
 
 
 # noinspection PyPep8Naming
@@ -47,4 +37,4 @@ def get_O(umbrella):
         return O_false
 
 
-forward_algorithm(3)
+forward_algorithm(5)
