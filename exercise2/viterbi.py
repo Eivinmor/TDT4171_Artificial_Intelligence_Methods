@@ -43,7 +43,6 @@ def calc_viterbi_message(prev_msg, evidence):
     return message
 
 
-# noinspection PyPep8Naming
 def get_O(umbrella):    # Returns the correct observation matrix given the current evidence
     if umbrella:
         return O_true
