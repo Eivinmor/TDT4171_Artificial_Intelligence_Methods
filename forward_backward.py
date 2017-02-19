@@ -1,15 +1,15 @@
 import numpy as np
 
-T = np.matrix([[0.7, 0.3],
+T = np.matrix([[0.7, 0.3],      # Transition model
                [0.3, 0.7]])
 
-O_true = np.matrix([[0.9, 0],
+O_true = np.matrix([[0.9, 0],   # Observation model
                     [0, 0.2]])
 
-O_false = np.matrix([[0.1, 0],
+O_false = np.matrix([[0.1, 0],  # Observation model
                      [0, 0.8]])
 
-ev = [None, 1, 1, 0, 1, 1]
+ev = [None, 1, 1, 0, 1, 1]      # Evidence
 
 
 def forward(prev_msg, evidence):

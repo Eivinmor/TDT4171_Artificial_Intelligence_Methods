@@ -9,7 +9,7 @@ O_true = np.matrix([[0.9, 0],   # Observation model
 O_false = np.matrix([[0.1, 0],  # Observation model
                      [0, 0.8]])
 
-ev = [None, 1, 1, 0, 1, 1]
+ev = [None, 1, 1, 0, 1, 1]      # Evidence
 
 
 def forward(prev_msg, evidence):
