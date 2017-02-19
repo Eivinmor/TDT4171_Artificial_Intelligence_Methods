@@ -37,7 +37,7 @@ def viterbi(t):
 
 
 def calc_viterbi_message(prev_msg, evidence):
-    path_probs = np.multiply(prev_msg.transpose(), T)   # Calculate probabilites of the paths
+    path_probs = np.multiply(prev_msg.transpose(), T)   # Calculate probabilities of the paths
     max_path_probs = path_probs.max(1)                  # Select max path probabilities per current state (matrix row)
     message = get_O(evidence) * max_path_probs          # Multiply with observation probabilities
     return message
