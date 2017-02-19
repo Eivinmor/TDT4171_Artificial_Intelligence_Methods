@@ -3,13 +3,13 @@ import numpy as np
 T = np.matrix([[0.7, 0.3],      # Transition model
                [0.3, 0.7]])
 
-O_true = np.matrix([[0.9, 0],   # Observation model for U=true
+O_true = np.matrix([[0.9, 0],   # Observation model for U_t = true
                     [0, 0.2]])
 
-O_false = np.matrix([[0.1, 0],  # Observation model for U=false
+O_false = np.matrix([[0.1, 0],  # Observation model for U_t = false
                      [0, 0.8]])
 
-ev = [None, 1, 1, 0, 1, 1]      # Evidence vector
+ev = [None, 0, 0, 1, 1, 0]      # Evidence vector
 
 
 def forward(prev_msg, evidence):
@@ -20,17 +20,17 @@ def forward(prev_msg, evidence):
 
 def viterbi(t):
     # Initialisation
-    mv = [None]*t   # List of matrices with messages in format [[true],[false]]
-    mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[1])     # Performing initial step, which is filtering
+    mv = [None]*t   # List of matrices with messages in format [[R_t = true],[R_t = false]]
+    mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[1])     # Performing initial step (filtering)
     print("\n", mv[0])
 
-    #  Algorithm
+    # Algorithm
     for i in range(1, t):
         mv[i] = calc_viterbi_message(mv[i-1], ev[i+1])
         print("\n", mv[i])
 
     # Printing most probable path
-    print("\nPath: ")
+    print("\nMost likely states: ")
     for state_probs in mv:
         print(state_probs[0, 0] > state_probs[1, 0], end=", ")
     print("\b\b")
