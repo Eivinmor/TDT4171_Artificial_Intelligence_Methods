@@ -3,13 +3,13 @@ import numpy as np
 T = np.matrix([[0.7, 0.3],      # Transition model
                [0.3, 0.7]])
 
-O_true = np.matrix([[0.9, 0],   # Observation model
+O_true = np.matrix([[0.9, 0],   # Observation model for U=true
                     [0, 0.2]])
 
-O_false = np.matrix([[0.1, 0],  # Observation model
+O_false = np.matrix([[0.1, 0],  # Observation model for U=false
                      [0, 0.8]])
 
-ev = [None, 1, 1, 0, 1, 1]      # Evidence
+ev = [None, 1, 1, 0, 1, 1]      # Evidence vector
 
 
 def forward(prev_msg, evidence):
@@ -18,19 +18,10 @@ def forward(prev_msg, evidence):
     return prediction / normalisation                           # Return normalised values
 
 
-def forward_algorithm(t):
-    t += 1
-    fv = [None]*t
-    fv[0] = np.matrix([[0.5], [0.5]])
-    for i in range(1, t):
-        fv[i] = forward(fv[i-1], ev[i])
-    return fv
-
-
 def viterbi(t):
     # Initialisation
     mv = [None]*t   # List of matrices with messages in format [[true],[false]]
-    mv[0] = forward_algorithm(1)[1]     # Performing initial step, which is filtering
+    mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[1])     # Performing initial step, which is filtering
     print("\n", mv[0])
 
     #  Algorithm
