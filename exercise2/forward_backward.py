@@ -51,4 +51,4 @@ def get_O(umbrella):       # Returns the correct observation matrix given the cu
         return O_false
 
 
-forward_backward_algorithm(2)
+forward_backward_algorithm(5)
