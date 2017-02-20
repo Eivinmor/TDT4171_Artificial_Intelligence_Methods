@@ -25,8 +25,8 @@ def viterbi(t):
     print("\n", mv[0])
 
     # Algorithm
-    for i in range(1, t):
-        mv[i] = calc_viterbi_message(mv[i-1], ev[i+1])
+    for i in range(1, t):   # Loop all intervals
+        mv[i] = calc_viterbi_message(mv[i-1], ev[i+1])  # calculate current message
         print("\n", mv[i])
     return mv
 
@@ -38,7 +38,7 @@ def calc_viterbi_message(prev_msg, evidence):
     return message
 
 
-def print_path(path): # Printing most probable path
+def print_path(path):   # Printing most probable path
     print("\nMost likely path: ")
     for state_probs in path:
         print(state_probs[0, 0] > state_probs[1, 0], end=", ")
