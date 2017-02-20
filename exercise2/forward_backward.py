@@ -9,7 +9,7 @@ O_true = np.matrix([[0.9, 0],   # Observation model
 O_false = np.matrix([[0.1, 0],  # Observation model
                      [0, 0.8]])
 
-ev = [None, 1, 1, 0, 1, 1]      # Evidence
+ev = [1, 1, 0, 1, 1]            # Evidence
 
 
 def forward(prev_msg, evidence):
@@ -23,7 +23,7 @@ def forward_algorithm(t):
     fv = [None]*t
     fv[0] = np.matrix([[0.5], [0.5]])
     for i in range(1, t):
-        fv[i] = forward(fv[i-1], ev[i])
+        fv[i] = forward(fv[i-1], ev[i-1])
     return fv
 
 
@@ -39,7 +39,7 @@ def forward_backward_algorithm(t):
         print("\nDay", i)
         sv[i-1] = np.multiply(fv[i], b)     # Calculate sv
         sv[i-1] /= sv[i-1].sum()            # Normalise sv
-        b = backward(b, ev[i])              # Save backward message
+        b = backward(b, ev[i-1])              # Save backward message
         print("sv:\n", sv[i-1])
         print("b:\n", b)
 

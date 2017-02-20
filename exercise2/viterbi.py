@@ -9,7 +9,7 @@ O_true = np.matrix([[0.9, 0],   # Observation model for U_t = true
 O_false = np.matrix([[0.1, 0],  # Observation model for U_t = false
                      [0, 0.8]])
 
-ev = [None, 0, 0, 1, 1, 0]      # Evidence vector
+ev = [0, 0, 1, 1, 0]            # Evidence vector
 
 
 def forward(prev_msg, evidence):
@@ -20,13 +20,13 @@ def forward(prev_msg, evidence):
 
 def viterbi(t):
     # Initialisation
-    mv = [None]*t   # List of matrices with messages in format [[R_t = true],[R_t = false]]
-    mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[1])     # Performing initial step (filtering)
+    mv = [None]*t   # List of message matrices in format [[R_t = true],[R_t = false]]
+    mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[0])     # Performing initial step (filtering)
     print("\n", mv[0])
 
     # Algorithm
     for i in range(1, t):   # Loop all intervals
-        mv[i] = calc_viterbi_message(mv[i-1], ev[i+1])  # calculate current message
+        mv[i] = calc_viterbi_message(mv[i-1], ev[i])  # Calculate current message
         print("\n", mv[i])
     return mv
 
