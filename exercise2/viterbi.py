@@ -12,7 +12,7 @@ O_false = np.matrix([[0.1, 0],  # Observation model for U_t = false
 ev = [0, 0, 1, 1, 0]            # Evidence vector
 
 
-def forward(prev_msg, evidence):
+def forward(prev_msg, evidence):  # Calculate forward message
     prediction = get_O(evidence) * np.transpose(T) * prev_msg   # O_t * T(transposed) * f_{t-1}
     normalisation = prediction.sum()                            # Calculate normalisation
     return prediction / normalisation                           # Return normalised values
@@ -21,12 +21,12 @@ def forward(prev_msg, evidence):
 def viterbi(t):
     # Initialisation
     mv = [None]*t   # List of message matrices in format [[R_t = true],[R_t = false]]
-    mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[0])     # Performing initial step (filtering)
+    mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[0])   # Performing initial step (filtering)
     print("\n", mv[0])
 
     # Algorithm
     for i in range(1, t):   # Loop all intervals
-        mv[i] = calc_viterbi_message(mv[i-1], ev[i])  # Calculate current message
+        mv[i] = calc_viterbi_message(mv[i-1], ev[i])    # Calculate current message
         print("\n", mv[i])
     return mv
 
@@ -38,13 +38,6 @@ def calc_viterbi_message(prev_msg, evidence):
     return message
 
 
-def print_path(path):   # Printing most probable path
-    print("\nMost likely path: ")
-    for state_probs in path:
-        print(state_probs[0, 0] > state_probs[1, 0], end=", ")
-    print("\b\b")
-
-
 def get_O(umbrella):    # Returns the correct observation matrix given the current evidence
     if umbrella:
         return O_true
@@ -52,6 +45,12 @@ def get_O(umbrella):    # Returns the correct observation matrix given the curre
         return O_false
 
 
+def print_path(path):   # Printing most probable path
+    print("\nMost likely path: ")
+    for state_probs in path:
+        print(state_probs[0, 0] > state_probs[1, 0], end=", ")
+    print("\b\b")
+
+
 most_probable_path = viterbi(5)
 print_path(most_probable_path)
-
