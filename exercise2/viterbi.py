@@ -28,12 +28,7 @@ def viterbi(t):
     for i in range(1, t):
         mv[i] = calc_viterbi_message(mv[i-1], ev[i+1])
         print("\n", mv[i])
-
-    # Printing most probable path
-    print("\nMost likely states: ")
-    for state_probs in mv:
-        print(state_probs[0, 0] > state_probs[1, 0], end=", ")
-    print("\b\b")
+    return mv
 
 
 def calc_viterbi_message(prev_msg, evidence):
@@ -43,6 +38,13 @@ def calc_viterbi_message(prev_msg, evidence):
     return message
 
 
+def print_path(path): # Printing most probable path
+    print("\nMost likely path: ")
+    for state_probs in path:
+        print(state_probs[0, 0] > state_probs[1, 0], end=", ")
+    print("\b\b")
+
+
 def get_O(umbrella):    # Returns the correct observation matrix given the current evidence
     if umbrella:
         return O_true
@@ -50,4 +52,6 @@ def get_O(umbrella):    # Returns the correct observation matrix given the curre
         return O_false
 
 
-viterbi(5)
+most_probable_path = viterbi(5)
+print_path(most_probable_path)
+
