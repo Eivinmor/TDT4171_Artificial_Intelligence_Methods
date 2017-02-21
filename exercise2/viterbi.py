@@ -31,13 +31,12 @@ def viterbi(t):
         print("\n", mv[i])
 
     # Backtrack path
-    pathState = mv[-1][0] > mv[-1][1]
-    solution = [(bool(pathState))]
-    for i in range(t-2, -1, -1):
-        pathState = edges[i][int(pathState)]
-        solution.append(pathState)
-    solution.reverse()
-
+    pathState = mv[-1][0] > mv[-1][1]                   # Get last state
+    solution = [None]*t
+    solution[t-1] = (bool(pathState))                   # Add last state to solution
+    for i in range(2, t+1):
+        pathState = edges[t-i][int(pathState)]          # Get previous state value in sequence
+        solution[t-i] = pathState                       # Add path to solution in reverse
     return solution
 
 
