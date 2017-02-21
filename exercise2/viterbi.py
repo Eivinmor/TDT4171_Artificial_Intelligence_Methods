@@ -21,20 +21,35 @@ def forward(prev_msg, evidence):  # Calculate forward message
 def viterbi(t):
     # Initialisation
     mv = [None]*t   # List of message matrices in format [[R_t = true],[R_t = false]]
+    edges = [[True for i in range(2)] for j in range(t-1)]
     mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[0])   # Performing initial step (filtering)
     print("\n", mv[0])
 
-    # Algorithm
+    # Calculate sequence probabilities
     for i in range(1, t):   # Loop all intervals
-        mv[i] = calc_viterbi_message(mv[i-1], ev[i])    # Calculate current message
+        mv[i] = calc_viterbi_message(mv[i-1], ev[i], edges[i-1])    # Calculate current message
         print("\n", mv[i])
-    return mv
+
+    # Backtrack path
+    pathState = mv[-1][0] > mv[-1][1]
+    solution = [(bool(pathState))]
+    for i in range(t-2, -1, -1):
+        pathState = edges[i][int(pathState)]
+        solution.append(pathState)
+    solution.reverse()
+
+    return solution
 
 
-def calc_viterbi_message(prev_msg, evidence):
+def calc_viterbi_message(prev_msg, evidence, edge):
     path_probs = np.multiply(prev_msg.transpose(), T)   # Calculate probabilities of the paths
     max_path_probs = path_probs.max(1)                  # Select max path probabilities per current state (matrix row)
     message = get_O(evidence) * max_path_probs          # Multiply with observation probabilities
+    # Save edges
+    if max_path_probs[0] == path_probs[0, 1]:
+        edge[1] = False
+    if max_path_probs[1] == path_probs[1, 1]:
+        edge[0] = False
     return message
 
 
@@ -44,13 +59,6 @@ def get_O(umbrella):    # Returns the correct observation matrix given the curre
     else:
         return O_false
 
-
-def print_path(path):   # Printing most probable path
-    print("\nMost likely path: ")
-    for state_probs in path:
-        print(state_probs[0, 0] > state_probs[1, 0], end=", ")
-    print("\b\b")
-
-
-most_probable_path = viterbi(5)
-print_path(most_probable_path)
+print("Evidence: ", ev)
+most_likely_sequence = viterbi(5)
+print("\n", most_likely_sequence)
