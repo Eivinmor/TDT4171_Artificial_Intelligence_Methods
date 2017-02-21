@@ -21,8 +21,8 @@ def forward(prev_msg, evidence):  # Calculate forward message
 def viterbi(t):
     # Initialisation
     mv = [None]*t   # List of message matrices in format [[R_t = true],[R_t = false]]
-    edges = [[True for i in range(2)] for j in range(t-1)]
-    mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[0])   # Performing initial step (filtering)
+    edges = [[True for i in range(2)] for j in range(t-1)]  # Initialising array for storing edges
+    mv[0] = forward(np.matrix([[0.5], [0.5]]), ev[0])       # Performing initial step (filtering)
     print("\n", mv[0])
 
     # Calculate sequence probabilities
@@ -41,15 +41,14 @@ def viterbi(t):
     return solution
 
 
-def calc_viterbi_message(prev_msg, evidence, edge):
+def calc_viterbi_message(prev_msg, evidence, intervalEdges):
     path_probs = np.multiply(prev_msg.transpose(), T)   # Calculate probabilities of the paths
     max_path_probs = path_probs.max(1)                  # Select max path probabilities per current state (matrix row)
     message = get_O(evidence) * max_path_probs          # Multiply with observation probabilities
-    # Save edges
-    if max_path_probs[0] == path_probs[0, 1]:
-        edge[1] = False
+    if max_path_probs[0] == path_probs[0, 1]:           # Save edges that lead to most probable sequence for each state
+        intervalEdges[1] = False
     if max_path_probs[1] == path_probs[1, 1]:
-        edge[0] = False
+        intervalEdges[0] = False
     return message
 
 
