@@ -1,5 +1,7 @@
-import random
+import math, random, copy
 import numpy as np
+
+
 training_data = open("data/training.txt", "r")
 
 # Initiate examples
@@ -17,18 +19,32 @@ for i in range(len(examples[0]) - 1):
     attributes.add(i)
 print("Attributes:", attributes)
 
+# Initiate random importances for random_importance()
+random_importances = [random.uniform(0, 1) for i in range(len(attributes))]
+
 
 def decision_tree_learning(examples, attributes, parent_examples):
     if not examples: return plurality_value(parent_examples)
     elif classes_are_equal(examples): return examples[0][-1]
     elif not attributes: return plurality_value(examples)
     else:
-
         attribute_importances = []
-        for a in attributes: attribute_importances.append(importance1(a, examples))
+        for a in attributes: attribute_importances.append(importance_random(a, examples))
         A = np.argmax(attribute_importances)
 
-    tree = Tree(A)
+        tree = Tree(A)
+
+        for v in [0, 1]:
+            new_examples = []
+            for e in examples:
+                if e[A] == v: new_examples.append(copy.deepcopy(e))
+
+            new_attributes = copy.deepcopy(attributes)
+            new_attributes.remove(A)
+
+            subtree = (decision_tree_learning(new_examples, attributes, examples))
+            tree.add_branch(v, subtree)
+    return tree
 
 
 def classes_are_equal(examples):
@@ -47,12 +63,12 @@ def plurality_value(examples):
     return random.randint(0, 1)
 
 
-def importance1(a, examples):
-    return 1
+def importance_random(a, examples):
+    return random_importances[a]
 
 
-def importance2(a, examples):
-    return None
+def importance_entropy(a, examples):
+    entropy = -(0.5*math.log2(0.5))
 
 
 class Tree:
@@ -61,7 +77,7 @@ class Tree:
     def __init__(self, root):
         self.tree.append(root)
 
-    def add(self, node):
-        self.tree.append(node)
+    def add_branch(self, label, subtree):
+        self.tree.append(subtree)
 
 decision_tree_learning(examples, attributes, examples)
