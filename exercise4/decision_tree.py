@@ -4,6 +4,7 @@ import copy
 import numpy as np
 from tree import Tree
 
+
 training_data = open("data/training.txt", "r")
 
 # Initiate examples
@@ -93,7 +94,7 @@ def run_tests(decision_tree):
     for i in range(len(test_attributes)):
         if test_correct_classes[i] == decision_tree.decide(test_attributes[i]):
             correct_decisions += 1
-    print(correct_decisions/len(test_correct_classes))
+    print("\nClassification accuracy:", correct_decisions/len(test_correct_classes))
 
 
 decision_tree = decision_tree_learning(examples, attributes, examples)

@@ -1,3 +1,6 @@
+from colour import Colour
+
+
 class Tree(object):
 
     def __init__(self, root):
@@ -9,10 +12,10 @@ class Tree(object):
 
     def __str__(self, depth=1):
         if self.nodes:
-            string = "A" + str(self.root+1)
+            string = Colour.GREEN + "A" + str(self.root+1) + Colour.END
             for label, node in self.nodes:
-                string += "\n" + "|\t"*depth + "\b" + str(label) + ": "
-                if type(node) is int: string += str(node)
+                string += "\n" + "|\t"*depth + "\b\b" + Colour.BLUE + str(label) + Colour.END + " - "
+                if type(node) is int: string += Colour.RED + str(node) + Colour.END
                 else: string += node.__str__(depth+1)
             return string
         else:
