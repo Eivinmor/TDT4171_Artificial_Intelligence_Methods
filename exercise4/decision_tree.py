@@ -101,7 +101,7 @@ class Tree(object):
 
     def decide(self, attributes):
         node = self
-        while node.nodes:
+        while not type(node) is int:
             label, node = node.nodes[attributes[node.root]]
         return node
 
@@ -119,5 +119,8 @@ for line in test_data:
     test_correct_classes.append(temp.pop(-1))
     test_attributes.append(temp)
 
+correct_decisions = 0
 for i in range(len(test_attributes)):
-    print(decision_tree.decide(test_attributes[i]))
+    if test_correct_classes[i] == decision_tree.decide(test_attributes[i]):
+        correct_decisions += 1
+print(correct_decisions/len(test_correct_classes))
