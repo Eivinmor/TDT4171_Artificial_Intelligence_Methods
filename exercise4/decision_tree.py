@@ -2,7 +2,7 @@ import math
 import random
 import copy
 import numpy as np
-
+from tree import Tree
 
 training_data = open("data/training.txt", "r")
 
@@ -23,7 +23,6 @@ print("Attributes:", attributes)
 
 
 def decision_tree_learning(examples, attributes, parent_examples):
-    print(attributes)
     if not examples: return plurality_value(parent_examples)
     elif classes_are_equal(examples): return examples[0][-1]
     elif not attributes: return plurality_value(examples)
@@ -79,48 +78,24 @@ def importance_entropy(a, examples):
     return entropy
 
 
-class Tree(object):
+def run_tests(decision_tree):
+    test_data = open("data/test.txt", "r")
+    test_attributes = []
+    test_correct_classes = []
+    for line in test_data:
+        temp = []
+        for numStr in line.strip("\n").split("\t"):
+            temp.append(int(numStr) - 1)
+        test_correct_classes.append(temp.pop(-1))
+        test_attributes.append(temp)
 
-    def __init__(self, root):
-        self.root = root
-        self.nodes = []
-
-    def add_node(self, label, node):
-        self.nodes.append((label, node))
-
-    def __str__(self, depth=1):
-        if self.nodes:
-            string = "A" + str(self.root+1)
-            for label, node in self.nodes:
-                string += "\n" + "|\t"*depth + "\b" + str(label) + ": "
-                if type(node) is int: string += str(node)
-                else: string += node.__str__(depth+1)
-            return string
-        else:
-            return self.root
-
-    def decide(self, attributes):
-        node = self
-        while not type(node) is int:
-            label, node = node.nodes[attributes[node.root]]
-        return node
+    correct_decisions = 0
+    for i in range(len(test_attributes)):
+        if test_correct_classes[i] == decision_tree.decide(test_attributes[i]):
+            correct_decisions += 1
+    print(correct_decisions/len(test_correct_classes))
 
 
 decision_tree = decision_tree_learning(examples, attributes, examples)
 print(decision_tree)
-
-test_data = open("data/test.txt", "r")
-test_attributes = []
-test_correct_classes = []
-for line in test_data:
-    temp = []
-    for numStr in line.strip("\n").split("\t"):
-        temp.append(int(numStr) - 1)
-    test_correct_classes.append(temp.pop(-1))
-    test_attributes.append(temp)
-
-correct_decisions = 0
-for i in range(len(test_attributes)):
-    if test_correct_classes[i] == decision_tree.decide(test_attributes[i]):
-        correct_decisions += 1
-print(correct_decisions/len(test_correct_classes))
+run_tests(decision_tree)
