@@ -42,13 +42,13 @@ def decision_tree_learning(examples, attributes, parent_examples):
 
             node = (decision_tree_learning(new_examples, new_attributes, examples))
             tree.add_node(v, node)
-    return tree
+        return tree
 
 
 def classes_are_equal(examples):
     class_zero = examples[0][-1]
     for i in range(1, len(examples)):
-        if examples[i][-1] == class_zero: return False
+        if examples[i][-1] != class_zero: return False
     return True
 
 
