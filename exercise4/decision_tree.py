@@ -9,7 +9,7 @@ RANDOM = 0
 INFO_GAIN = 1
 
 # SETTINGS
-importance_function = RANDOM
+importance_function = INFO_GAIN
 # ---------
 
 training_data = open("data/training.txt", "r")
@@ -102,10 +102,7 @@ def remainder(A, examples):
 
 
 def B(q):
-    # if q == 0: return -float("inf")
-    # elif q == 1: return -float("inf")
-    if q == 0: return -(math.log2(1))
-    elif q == 1: return -(math.log2(1))
+    if q == 0 or q == 1: return 0
     return -(q * math.log2(q) + (1 - q) * math.log2(1 - q))
 
 
