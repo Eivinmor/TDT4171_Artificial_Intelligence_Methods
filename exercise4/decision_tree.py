@@ -5,6 +5,12 @@ import numpy as np
 from tree import Tree
 from colour import Colour
 
+RANDOM = 0
+INFO_GAIN = 1
+
+# SETTINGS
+importance_function = RANDOM
+# ---------
 
 training_data = open("data/training.txt", "r")
 
@@ -15,13 +21,11 @@ for line in training_data:
     for numStr in line.strip("\n").split("\t"):
         temp.append(int(numStr) - 1)
     examples.append(temp)
-print("Examples:", examples)
 
 # Initiate attributes
 attributes = []
 for i in range(len(examples[0]) - 1):
     attributes.append(i)
-print("Attributes:", attributes)
 
 
 def decision_tree_learning(examples, attributes, parent_examples):
@@ -30,7 +34,7 @@ def decision_tree_learning(examples, attributes, parent_examples):
     elif not attributes: return plurality_value(examples)
     else:
         attribute_importances = []
-        for a in attributes: attribute_importances.append(importance_random(a, examples))
+        for a in attributes: attribute_importances.append(importance(a, examples))
         A = attributes[np.argmax(attribute_importances)]
         tree = Tree(A)
 
@@ -61,6 +65,11 @@ def plurality_value(examples):
     if class_amount[0] > class_amount[1]: return 0
     elif class_amount[0] < class_amount[1]: return 1
     return random.randint(0, 1)
+
+
+def importance(a, examples):
+    if importance_function == 0: return importance_random(a, examples)
+    elif importance_function == 1: return importance_information_gain(a, examples)
 
 
 def importance_random(a, examples):
