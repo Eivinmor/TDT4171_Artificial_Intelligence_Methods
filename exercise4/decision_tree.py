@@ -29,7 +29,7 @@ def decision_tree_learning(examples, attributes, parent_examples):
     elif not attributes: return plurality_value(examples)
     else:
         attribute_importances = []
-        for a in attributes: attribute_importances.append(importance_information_gain(a, examples))
+        for a in attributes: attribute_importances.append(importance_random(a, examples))
         A = attributes[np.argmax(attribute_importances)]
         tree = Tree(A)
 
@@ -122,7 +122,8 @@ def run_tests(decision_tree):
         print(actual, end=" ")
         if correct == actual:
             correct_decisions += 1
-    print("\n--------------------\nAccuracy:", correct_decisions/len(test_correct_classes))
+    print("\n--------------------\n")
+    print("{0:} {1:0.1f}%".format("Accuracy:", correct_decisions/len(test_correct_classes)*100))
 
 
 decision_tree = decision_tree_learning(examples, attributes, examples)
