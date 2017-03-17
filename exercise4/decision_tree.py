@@ -3,6 +3,7 @@ import random
 import copy
 import numpy as np
 from tree import Tree
+from colour import Colour
 
 
 training_data = open("data/training.txt", "r")
@@ -119,10 +120,12 @@ def run_tests(decision_tree):
     for i in range(len(test_attributes)):
         correct = test_correct_classes[i]
         actual = decision_tree.decide(test_attributes[i])
-        print(actual, end=" ")
+
         if correct == actual:
             correct_decisions += 1
-    print("\n--------------------\n")
+            print(actual, end=" ")
+        else: print(Colour.RED + str(actual) + Colour.END, end=" ")
+    print("\n--------------------")
     print("{0:} {1:0.1f}%".format("Accuracy:", correct_decisions/len(test_correct_classes)*100))
 
 
