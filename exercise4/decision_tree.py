@@ -29,7 +29,7 @@ def decision_tree_learning(examples, attributes, parent_examples):
     elif not attributes: return plurality_value(examples)
     else:
         attribute_importances = []
-        for a in attributes: attribute_importances.append(importance_random(a, examples))
+        for a in attributes: attribute_importances.append(importance_information_gain(a, examples))
         A = attributes[np.argmax(attribute_importances)]
         tree = Tree(A)
 
@@ -66,17 +66,39 @@ def importance_random(a, examples):
     return random.uniform(0, 1)
 
 
-def importance_entropy(a, examples):
-    numOf0 = 0
-    numOf1 = 0
+def importance_information_gain(a, examples):
+    p = numOfPositives(examples)
+    q = p/len(examples)
+    return B(q) - remainder(a, examples)
+
+
+def numOfPositives(examples):
+    p = 0
     for e in examples:
-        if e[a] == 0: numOf0 += 1
-        elif e[a] == 1: numOf1 += 1
-    prob0 = numOf0/len(examples)
-    prob1 = numOf1/len(examples)
-    entropy = -(prob0 * math.log2(prob0))
-    entropy += -(prob1 * math.log2(prob1))
-    return entropy
+        if e[-1] == 1: p += 1
+    return p
+
+
+def remainder(A, examples):
+    examples0 = []
+    examples1 = []
+    for e in examples:
+        if e[A] == 0: examples0.append(e)
+        elif e[A] == 1: examples1.append(e)
+    p0 = numOfPositives(examples0)
+    p1 = numOfPositives(examples1)
+    print(p0, p1)
+
+    remainder = len(examples0)/len(examples) * B(p0/len(examples0))
+    return remainder
+
+
+def B(q):
+    # if q == 0: return -float("inf")
+    # elif q == 1: return -float("inf")
+    if q == 0: return -(math.log2(1))
+    elif q == 1: return -(math.log2(1))
+    return -(q * math.log2(q) + (1 - q) * math.log2(1 - q))
 
 
 def run_tests(decision_tree):
