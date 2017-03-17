@@ -87,8 +87,6 @@ def remainder(A, examples):
         elif e[A] == 1: examples1.append(e)
     p0 = numOfPositives(examples0)
     p1 = numOfPositives(examples1)
-    print(p0, p1)
-
     remainder = len(examples0)/len(examples) * B(p0/len(examples0))
     return remainder
 
@@ -113,10 +111,18 @@ def run_tests(decision_tree):
         test_attributes.append(temp)
 
     correct_decisions = 0
+    print("\nRunning tests:")
+    print("Correct:", end=" ")
+    for c in test_correct_classes:
+        print(c, end=" ")
+    print("\nActual: ", end=" ")
     for i in range(len(test_attributes)):
-        if test_correct_classes[i] == decision_tree.decide(test_attributes[i]):
+        correct = test_correct_classes[i]
+        actual = decision_tree.decide(test_attributes[i])
+        print(actual, end=" ")
+        if correct == actual:
             correct_decisions += 1
-    print("\nClassification accuracy:", correct_decisions/len(test_correct_classes))
+    print("\n--------------------\nAccuracy:", correct_decisions/len(test_correct_classes))
 
 
 decision_tree = decision_tree_learning(examples, attributes, examples)
