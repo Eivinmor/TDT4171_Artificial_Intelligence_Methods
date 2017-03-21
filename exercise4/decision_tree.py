@@ -98,6 +98,7 @@ def remainder(A, examples):
     p0 = numOfPositives(examples0)
     p1 = numOfPositives(examples1)
     remainder = len(examples0)/len(examples) * B(p0/len(examples0))
+    remainder += len(examples1)/len(examples) * B(p1/len(examples1))
     return remainder
 
 
