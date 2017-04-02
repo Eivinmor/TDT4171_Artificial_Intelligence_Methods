@@ -9,3 +9,15 @@ class Colour:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     END = '\033[0m'
+
+    # For compatible print
+    # PURPLE = ""
+    # CYAN = ""
+    # DARKCYAN = ""
+    # BLUE = ""
+    # GREEN = ""
+    # YELLOW = ""
+    # RED = ""
+    # BOLD = ""
+    # UNDERLINE = ""
+    # END = ""
