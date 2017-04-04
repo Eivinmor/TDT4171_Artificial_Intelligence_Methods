@@ -56,8 +56,7 @@ def train_and_plot(xtrain, ytrain, xtest, ytest, training_method, learn_rate=0.1
     plt.figure()
     # train data
     data = pd.DataFrame(np.hstack((xtrain, ytrain.reshape(xtrain.shape[0], 1))), columns=['x', 'y', 'lab'])
-    ax = data.plot(kind='scatter', x='x', y='y', c='lab')
-
+    ax = data.plot(kind='scatter', x='x', y='y', c='lab', cmap=cm.copper, edgecolors='black')
 
     # train weights
     w = training_method(xtrain, ytrain, learn_rate, niter)
@@ -68,6 +67,6 @@ def train_and_plot(xtrain, ytrain, xtest, ytest, training_method, learn_rate=0.1
         y_est.append(classify(w, xtest[i]))
     y_est = np.array(y_est)
     data_test = pd.DataFrame(np.hstack((xtest, y_est.reshape(xtest.shape[0], 1))), columns=['x', 'y', 'lab'])
-    data_test.plot(kind='scatter', x='x', y='y', c='lab', ax=ax, cmap=cm.coolwarm)
+    data_test.plot(kind='scatter', x='x', y='y', c='lab', ax=ax, cmap=cm.coolwarm, edgecolors='black')
     print("error=", np.mean(error))
     return w
