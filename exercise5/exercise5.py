@@ -38,11 +38,17 @@ def L_simple_deriv(w, i):
     return a + b + c
 
 
-values = [[None for i in range(len(r))] for i in range(len(r))]
-for i in range(len(r)):
-    for j in range(len(r)):
-        w = [w1_matrix[i][j], w2_matrix[i][j]]
-        values[i][j] = L_simple(w)
+def partI_task1():
+    values = [[None for i in range(len(r))] for i in range(len(r))]
+    for i in range(len(r)):
+        for j in range(len(r)):
+            w = [w1_matrix[i][j], w2_matrix[i][j]]
+            values[i][j] = L_simple(w)
+    fig = plt.figure()
+    plt.plot()
+    plt.pcolormesh(w1_matrix, w2_matrix, values, cmap='RdBu')
+    plt.colorbar()
+    plt.show()
 
 
 def gradient_descent(learning_rate, iterations, init_w):
@@ -57,20 +63,19 @@ def gradient_descent(learning_rate, iterations, init_w):
     return L_simple_storage
 
 
-learning_rates = [0.0001, 0.01, 0.1, 1, 10, 100]
-iterations = 10000
-# init_w = [r[random.randint(0, r.size - 1)], r[random.randint(0, r.size - 1)]]
-init_w = [0, 6]
+def partI_task3():
+    learning_rates = [0.0001, 0.01, 0.1, 1, 10, 100]
+    iterations = 10000
+    # init_w = [r[random.randint(0, r.size - 1)], r[random.randint(0, r.size - 1)]]
+    init_w = [0, 6]
 
-for lr in learning_rates:
-    print("Running GD with lr =", lr)
-    values = gradient_descent(lr, iterations, init_w)
-    plt.plot(values, label=lr)
-plt.legend(loc=1)
-plt.show()
+    for lr in learning_rates:
+        print("Running GD with lr =", lr)
+        values = gradient_descent(lr, iterations, init_w)
+        plt.plot(values, label=lr)
+    plt.legend(loc=1)
+    plt.show()
 
-# fig = plt.figure()
-# plt.plot()
-# plt.pcolormesh(w1_matrix, w2_matrix, values, cmap='RdBu')
-# plt.colorbar()
-# plt.show()
+
+partI_task3()
+
