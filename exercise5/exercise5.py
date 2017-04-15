@@ -57,10 +57,11 @@ def gradient_descent(learning_rate, iterations, init_w):
     for i in range(iterations):
         L_simple_storage.append(L_simple(w))
         updateWeights(w, learning_rate)
-        if i % (iterations/20) == 0:
-            print("|", end="", flush=True)
-    print()
-    print("Final weights:", w)
+        # if i % (iterations/20) == 0:
+            # print("|", end="", flush=True)
+    # print()
+    print("Final weights:", "{0:.2f}".format(w[0]), "{0:.2f}".format(w[1]))
+    print("Final L_simple value:", "{0:.5f}".format(L_simple_storage[-1]))
     return L_simple_storage
 
 
