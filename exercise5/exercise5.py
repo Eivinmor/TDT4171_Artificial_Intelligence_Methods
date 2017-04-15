@@ -26,7 +26,7 @@ def L_simple(w):
 #     p2 = (delta(w[1])) ** 2
 #     p3 = (delta(w[0]+w[1]) - 1) ** 2
 #     return p1 + p2 + p3
-def updateWeights(w):
+def updateWeights(w, learning_rate):
     w[0] += - learning_rate * (L_simple_deriv(w, 0))
     w[1] += - learning_rate * (L_simple_deriv(w, 1))
 
@@ -45,19 +45,29 @@ for i in range(len(r)):
         values[i][j] = L_simple(w)
 
 
-learning_rate = 0.01
-w = [r[random.randint(0, r.size - 1)], r[random.randint(0, r.size - 1)]]
-w_storage = []
-L_simple_storage = []
+def gradient_descent(learning_rate, iterations, init_w):
+    w = copy.copy(init_w)
+    L_simple_storage = []
+    for i in range(iterations):
+        L_simple_storage.append(L_simple(w))
+        updateWeights(w, learning_rate)
+        if i % (iterations/20) == 0:
+            print("|", end="", flush=True)
+    print("\n")
+    return L_simple_storage
 
-for i in range(0, 10000):
-    w_storage.append(copy.copy(w))
-    L_simple_storage.append(L_simple(w))
-    updateWeights(w)
 
-plt.plot(L_simple_storage)
+learning_rates = [0.0001, 0.01, 0.1, 1, 10, 100]
+iterations = 10000
+# init_w = [r[random.randint(0, r.size - 1)], r[random.randint(0, r.size - 1)]]
+init_w = [0, 6]
+
+for lr in learning_rates:
+    print("Running GD with lr =", lr)
+    values = gradient_descent(lr, iterations, init_w)
+    plt.plot(values, label=lr)
+plt.legend(loc=1)
 plt.show()
-
 
 # fig = plt.figure()
 # plt.plot()
