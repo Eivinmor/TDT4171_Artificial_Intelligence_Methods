@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import copy
 
 
 r = np.arange(-6, 6.0001, 0.05)
@@ -44,18 +45,19 @@ for i in range(len(r)):
         values[i][j] = L_simple(w)
 
 
-learning_rate = 0.1
+learning_rate = 0.01
 w = [r[random.randint(0, r.size - 1)], r[random.randint(0, r.size - 1)]]
-c = 1
 w_storage = []
-for i in range(0, 100000):
-    # print(L_simple(w))
-    w_storage.append(w)
-    updateWeights(w)
-    if i % 1000 == 0:
-        print(L_simple(w))
+L_simple_storage = []
 
-print(w_storage)
+for i in range(0, 10000):
+    w_storage.append(copy.copy(w))
+    L_simple_storage.append(L_simple(w))
+    updateWeights(w)
+
+plt.plot(L_simple_storage)
+plt.show()
+
 
 # fig = plt.figure()
 # plt.plot()
