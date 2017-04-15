@@ -46,7 +46,7 @@ def partI_task1():
             values[i][j] = L_simple(w)
     fig = plt.figure()
     plt.plot()
-    plt.pcolormesh(w1_matrix, w2_matrix, values, cmap='RdBu')
+    plt.pcolormesh(w1_matrix, w2_matrix, values, cmap='coolwarm')
     plt.colorbar()
     plt.show()
 
@@ -59,7 +59,8 @@ def gradient_descent(learning_rate, iterations, init_w):
         updateWeights(w, learning_rate)
         if i % (iterations/20) == 0:
             print("|", end="", flush=True)
-    print("\n")
+    print()
+    print("Final weights:", w)
     return L_simple_storage
 
 
@@ -69,8 +70,11 @@ def partI_task3():
     # init_w = [r[random.randint(0, r.size - 1)], r[random.randint(0, r.size - 1)]]
     init_w = [0, 6]
 
+    print("\nIterations:", iterations)
+    print("Initial weights:", init_w)
+
     for lr in learning_rates:
-        print("Running GD with lr =", lr)
+        print("\nRunning GD with lr =", lr)
         values = gradient_descent(lr, iterations, init_w)
         plt.plot(values, label=lr)
     plt.legend(loc=1)
@@ -78,4 +82,4 @@ def partI_task3():
 
 
 partI_task3()
-
+# partI_task1()
