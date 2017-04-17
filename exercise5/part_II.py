@@ -84,7 +84,5 @@ def read_file(filename):
 
 x_train, y_train = read_file("data_small_separable_train")
 x_test, y_test = read_file("data_small_separable_test")
-# print(batch_train_w(x_train, y_train, niter=50))
-# train_and_plot(x_train, y_train, x_test, y_test, batch_train_w, learn_rate=1, niter=100)
-train_and_plot(x_train, y_train, x_test, y_test, stochast_train_w, learn_rate=1, niter=100)
-
+train_and_plot(x_train, y_train, x_test, y_test, batch_train_w, learn_rate=1, niter=100)
+# train_and_plot(x_train, y_train, x_test, y_test, stochast_train_w, learn_rate=1, niter=1000)
