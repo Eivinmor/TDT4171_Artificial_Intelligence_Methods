@@ -30,9 +30,9 @@ def batch_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
             update_grad = 0.0
             for n in range(num_n):
                 print(n)
-                update_grad += (y_train[0, n] - logistic_wx(w, x_train[n])
+                update_grad += (y_train[n] - logistic_wx(w, x_train[n])
                                 * (logistic_wx(w, x_train[n]) * (1 - logistic_wx(w, x_train[n]))
-                                   * x_train[n, i]))  # something needs to be done here
+                                   * x_train[n][i]))  # something needs to be done here
             w[i] -= learn_rate * update_grad / num_n
     return w
 
@@ -83,9 +83,9 @@ def readFile(filename):
         line_list = line.strip("\n").split("\t")
         x_list.append([float(line_list[0]), float(line_list[1])])
         y_list.append(float(line_list[2]))
-    x_mat = np.matrix(x_list)
-    y_mat = np.matrix(y_list)
-    return x_mat, y_mat
+    x_array = np.array(x_list)
+    y_array = np.array(y_list)
+    return x_array, y_array
 
 
 x_train, y_train = readFile("data_big_nonsep_train")
