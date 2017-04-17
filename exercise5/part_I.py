@@ -1,5 +1,4 @@
 import numpy as np
-import random
 import matplotlib.pyplot as plt
 import copy
 
@@ -8,33 +7,26 @@ r = np.arange(-6, 6.0001, 0.05)
 w1_matrix, w2_matrix = np.meshgrid(r, r)
 
 
-def delta(w, x):
+def logistic(w, x):
     return 1 / (1 + np.exp(- np.inner(w, x)))
 
 
-# def delta(x):
-#     return 1 / (1 + np.exp(-x))
 def L_simple(w):
-    p1 = (delta(w, [1, 0]) - 1) ** 2
-    p2 = (delta(w, [0, 1])) ** 2
-    p3 = (delta(w, [1, 1]) - 1) ** 2
+    p1 = (logistic(w, [1, 0]) - 1) ** 2
+    p2 = (logistic(w, [0, 1])) ** 2
+    p3 = (logistic(w, [1, 1]) - 1) ** 2
     return p1 + p2 + p3
 
 
-# def L_simple(w):
-#     p1 = (delta(w[0]) - 1) ** 2
-#     p2 = (delta(w[1])) ** 2
-#     p3 = (delta(w[0]+w[1]) - 1) ** 2
-#     return p1 + p2 + p3
 def updateWeights(w, learning_rate):
     w[0] += - learning_rate * (L_simple_deriv(w, 0))
     w[1] += - learning_rate * (L_simple_deriv(w, 1))
 
 
 def L_simple_deriv(w, i):
-    a = (delta(w, [1, 0]) - 1) * (delta(w, [1, 0])) * (1 - delta(w, [1, 0])) * [1, 0][i]
-    b = (delta(w, [0, 1]))     * (delta(w, [0, 1])) * (1 - delta(w, [0, 1])) * [0, 1][i]
-    c = (delta(w, [1, 1]) - 1) * (delta(w, [1, 1])) * (1 - delta(w, [1, 1])) * [1, 1][i]
+    a = (logistic(w, [1, 0]) - 1) * (logistic(w, [1, 0])) * (1 - logistic(w, [1, 0])) * [1, 0][i]
+    b = (logistic(w, [0, 1]))     * (logistic(w, [0, 1])) * (1 - logistic(w, [0, 1])) * [0, 1][i]
+    c = (logistic(w, [1, 1]) - 1) * (logistic(w, [1, 1])) * (1 - logistic(w, [1, 1])) * [1, 1][i]
     return a + b + c
 
 
@@ -82,5 +74,5 @@ def partI_task3():
     plt.show()
 
 
-partI_task3()
 # partI_task1()
+partI_task3()
