@@ -19,6 +19,24 @@ def classify(w, x):
 # x_train = [number_of_samples,number_of_features] = number_of_samples x \in R^number_of_features
 
 
+def batch_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
+    x_train = np.hstack((np.array([1]*x_train.shape[0]).reshape(x_train.shape[0], 1), x_train))
+    dim = x_train.shape[1]
+    num_n = x_train.shape[0]
+    w = np.random.rand(dim)
+    index_lst = []
+    for it in range(niter):
+        for i in range(dim):
+            update_grad = 0.0
+            for n in range(num_n):
+                print(n)
+                update_grad += (y_train[0, n] - logistic_wx(w, x_train[n])
+                                * (logistic_wx(w, x_train[n]) * (1 - logistic_wx(w, x_train[n]))
+                                   * x_train[n, i]))  # something needs to be done here
+            w[i] -= learn_rate * update_grad / num_n
+    return w
+
+
 def stochast_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
     x_train = np.hstack((np.array([1]*x_train.shape[0]).reshape(x_train.shape[0], 1), x_train))
     dim = x_train.shape[1]
@@ -34,21 +52,6 @@ def stochast_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
         for i in range(dim):
             update_grad = 1  # ## something needs to be done here
             w[i] += learn_rate  # ## something needs to be done here
-    return w
-
-
-def batch_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
-    x_train = np.hstack((np.array([1]*x_train.shape[0]).reshape(x_train.shape[0], 1), x_train))
-    dim = x_train.shape[1]
-    num_n = x_train.shape[0]
-    w = np.random.rand(dim)
-    index_lst = []
-    for it in range(niter):
-        for i in range(dim):
-            update_grad = 0.0
-            for n in range(num_n):
-                update_grad += (-logistic_wx(w, x_train[n])+y_train[n])  # something needs to be done here
-            w[i] += learn_rate * update_grad / num_n
     return w
 
 
@@ -70,3 +73,22 @@ def train_and_plot(xtrain, ytrain, xtest, ytest, training_method, learn_rate=0.1
     data_test.plot(kind='scatter', x='x', y='y', c='lab', ax=ax, cmap=cm.coolwarm, edgecolors='black')
     print("error=", np.mean(error))
     return w
+
+
+def readFile(filename):
+    x_list = []
+    y_list = []
+    f = open("data/" + filename + ".csv")
+    for line in f:
+        line_list = line.strip("\n").split("\t")
+        x_list.append([float(line_list[0]), float(line_list[1])])
+        y_list.append(float(line_list[2]))
+    x_mat = np.matrix(x_list)
+    y_mat = np.matrix(y_list)
+    return x_mat, y_mat
+
+
+x_train, y_train = readFile("data_big_nonsep_train")
+x_test, y_test = readFile("data_big_nonsep_test")
+# print(batch_train_w(x_train, y_train, niter=10))
+train_and_plot(x_train, y_train, x_test, y_test, batch_train_w)
