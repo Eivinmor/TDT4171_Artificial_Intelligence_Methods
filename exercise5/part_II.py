@@ -3,6 +3,7 @@ import random
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import cm
+import time
 
 
 def logistic(w, x):
@@ -15,6 +16,7 @@ def classify(w, x):
 
 
 def batch_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
+    start_time = time.time()
     x_train = np.hstack((np.array([1]*x_train.shape[0]).reshape(x_train.shape[0], 1), x_train))
     dim = x_train.shape[1]
     num_n = x_train.shape[0]
@@ -27,12 +29,14 @@ def batch_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
             for n in range(num_n):
                 logi_val = logistic(w, x_train[n])
                 # something needs to be done here
-                update_grad += (y_train[n] - logi_val) * logi_val * (1 - logi_val) * -x_train[n][i]
-            w[i] -= learn_rate * update_grad / num_n
+                update_grad += (y_train[n] - logi_val) * logi_val * (1 - logi_val) * x_train[n][i]
+            w[i] += learn_rate * update_grad / num_n
+    print("Batch train execution time: ", time.time() - start_time, "seconds")
     return w
 
 
 def stochast_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
+    start_time = time.time()
     x_train = np.hstack((np.array([1]*x_train.shape[0]).reshape(x_train.shape[0], 1), x_train))
     dim = x_train.shape[1]
     num_n = x_train.shape[0]
@@ -49,8 +53,9 @@ def stochast_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
         for i in range(dim):
             logi_val = logistic(w, x)
             # TODO Hvorfor må x[i] være negativ her, men ikke i part_I?
-            update_grad = (y - logi_val) * logi_val * (1 - logi_val) * -x[i]  # ## something needs to be done here
-            w[i] -= learn_rate * update_grad  # ## something needs to be done here
+            update_grad = (y - logi_val) * logi_val * (1 - logi_val) * x[i]  # ## something needs to be done here
+            w[i] += learn_rate * update_grad  # ## something needs to be done here
+    print("Stochastic train execution time: ", time.time() - start_time, "seconds")
     return w
 
 
@@ -74,6 +79,21 @@ def train_and_plot(xtrain, ytrain, xtest, ytest, training_method, learn_rate=0.1
     return w
 
 
+def train_and_test(xtrain, ytrain, xtest, ytest, training_method, learn_rate=0.1, niter=10):
+    # train weights
+    start_time = time.time()
+    w = training_method(xtrain, ytrain, learn_rate, niter)
+    run_time = time.time() - start_time
+    error = []
+    y_est = []
+    for i in range(len(ytest)):
+        error.append(np.abs(classify(w, xtest[i]) - ytest[i]))
+        y_est.append(classify(w, xtest[i]))
+    y_est = np.array(y_est)
+    print("error=", np.mean(error))
+    return run_time, np.mean(error)
+
+
 def read_file(filename):
     x_list = []
     y_list = []
@@ -86,8 +106,18 @@ def read_file(filename):
     y_array = np.array(y_list)
     return x_array, y_array
 
-
 x_train, y_train = read_file("data_big_nonsep_train")
 x_test, y_test = read_file("data_big_nonsep_test")
-train_and_plot(x_train, y_train, x_test, y_test, batch_train_w, learn_rate=1, niter=100)
-# train_and_plot(x_train, y_train, x_test, y_test, stochast_train_w, learn_rate=1, niter=1000000)
+# train_and_plot(x_train, y_train, x_test, y_test, batch_train_w, niter=200)
+# train_and_plot(x_train, y_train, x_test, y_test, stochast_train_w, niter=10)
+
+time_list = []
+error_list = []
+iter_list = [10, 20, 50, 100, 200, 500, 1000, 2000, 2000000]
+for i in iter_list:
+    run_time, error = train_and_test(x_train, y_train, x_test, y_test, stochast_train_w, niter=i)
+    time_list.append(run_time)
+    error_list.append(error)
+plt.plot(iter_list, error_list)
+plt.plot(iter_list, time_list)
+plt.show()
