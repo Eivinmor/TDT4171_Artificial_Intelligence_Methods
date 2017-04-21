@@ -113,11 +113,18 @@ x_test, y_test = read_file("data_big_nonsep_test")
 
 time_list = []
 error_list = []
-iter_list = [10, 20, 50, 100, 200, 500, 1000, 2000, 2000000]
+iter_list = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000]
 for i in iter_list:
+    print("Running with", i, "iterations.")
     run_time, error = train_and_test(x_train, y_train, x_test, y_test, stochast_train_w, niter=i)
     time_list.append(run_time)
     error_list.append(error)
-plt.plot(iter_list, error_list)
+
+# plt.ylabel('Error')
+# plt.plot(iter_list, error_list)
+
+plt.ylabel('Time (s)')
 plt.plot(iter_list, time_list)
+
+plt.xlabel('Iterations')
 plt.show()
