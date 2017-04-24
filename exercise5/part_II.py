@@ -28,7 +28,6 @@ def batch_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
             update_grad = 0.0
             for n in range(num_n):
                 logi_val = logistic(w, x_train[n])
-                # something needs to be done here
                 update_grad += (y_train[n] - logi_val) * logi_val * (1 - logi_val) * x_train[n][i]
             w[i] += learn_rate * update_grad / num_n
     print("Batch train execution time: ", time.time() - start_time, "seconds")
@@ -52,9 +51,8 @@ def stochast_train_w(x_train, y_train, learn_rate=0.1, niter=1000):
         y = y_train[xy_index]
         for i in range(dim):
             logi_val = logistic(w, x)
-            # TODO Hvorfor må x[i] være negativ her, men ikke i part_I?
-            update_grad = (y - logi_val) * logi_val * (1 - logi_val) * x[i]  # ## something needs to be done here
-            w[i] += learn_rate * update_grad  # ## something needs to be done here
+            update_grad = (y - logi_val) * logi_val * (1 - logi_val) * x[i]
+            w[i] += learn_rate * update_grad
     print("Stochastic train execution time: ", time.time() - start_time, "seconds")
     return w
 
@@ -85,11 +83,8 @@ def train_and_test(xtrain, ytrain, xtest, ytest, training_method, learn_rate=0.1
     w = training_method(xtrain, ytrain, learn_rate, niter)
     run_time = time.time() - start_time
     error = []
-    y_est = []
     for i in range(len(ytest)):
         error.append(np.abs(classify(w, xtest[i]) - ytest[i]))
-        y_est.append(classify(w, xtest[i]))
-    y_est = np.array(y_est)
     print("error=", np.mean(error))
     return run_time, np.mean(error)
 
@@ -120,11 +115,11 @@ for i in iter_list:
     time_list.append(run_time)
     error_list.append(error)
 
-# plt.ylabel('Error')
-# plt.plot(iter_list, error_list)
+plt.ylabel('Error')
+plt.plot(iter_list, error_list)
 
-plt.ylabel('Time (s)')
-plt.plot(iter_list, time_list)
+# plt.ylabel('Time (s)')
+# plt.plot(iter_list, time_list)
 
 plt.xlabel('Iterations')
 plt.show()
